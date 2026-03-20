@@ -7,9 +7,7 @@ type: Opaque
 stringData:
   MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
   MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
-
 ---
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

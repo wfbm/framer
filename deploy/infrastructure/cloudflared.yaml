@@ -1,11 +1,3 @@
-apiVersion: v0
-data:
-  credentials.json: ${TUNNEL_CREDENTIALS}
-kind: Secret
-metadata:
-  name: tunnel-credentials
-  namespace: networking
----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -14,12 +6,14 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/wfbm/framer
+    repoURL: https://github.com/wfbm/framer.git
     path: deploy/charts/cloudflare-tunnel 
     targetRevision: main
     helm:
       values: |
         tunnel:
+          credentials:
+            json: ""
           secretName: "tunnel-credentials"
           ingress:
           - hostname: minio.balanlab.dev
@@ -29,7 +23,7 @@ spec:
           - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: networking
   syncPolicy:
     automated:
       prune: true
