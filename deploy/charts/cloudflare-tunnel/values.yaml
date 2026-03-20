@@ -1,0 +1,9 @@
+tunnel:
+  secretName: null
+  ingress: []
+
+image:
+  repository: cloudflare/cloudflared
+  pullPolicy: IfNotPresent
+
+replicaCount: 2

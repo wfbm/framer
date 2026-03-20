@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-credentials
+  namespace: storage
+type: Opaque
+stringData:
+  MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
+  MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-infra
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: minio
+    targetRevision: 17.0.21
+    helm:
+      values: |
+        image:
+          registry: quay.io/minio
+          repository: minio
+          tag: latest
+          pullPolicy: IfNotPresent
+        command: 
+          - /usr/bin/minio
+          - server
+          - /bitnami/minio/data
+        auth:
+          existingSecret: minio-credentials
+          forcePassword: true
+        persistence: 
+          enabled: true
+          size: 5Gi
+        service:
+          type: ClusterIP
+          ports:
+            s3: 9000
+        global:
+          imagePullSecrets: []
+          security:
+            allowInsecureImages: true
+        console:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: storage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
