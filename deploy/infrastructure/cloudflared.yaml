@@ -12,6 +12,7 @@ spec:
     helm:
       values: |-
         tunnel:
+          credentials: ""
           secretName: "tunnel-credentials"
   destination:
     server: https://kubernetes.default.svc
