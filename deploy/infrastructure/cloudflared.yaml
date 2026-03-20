@@ -2,18 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cloudflared
-  namespace: networking
+  namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/wfbm/framer.git
-    path: deploy/charts/cloudflare-tunnel 
-    targetRevision: main
+    path: deploy/charts/cloudflare-tunnel
+    targetRevision: HEAD
     helm:
-      values: |
+      values: |-
         tunnel:
-          credentials:
-            json: ""
           secretName: "tunnel-credentials"
           ingress:
           - hostname: minio.balanlab.dev
@@ -28,3 +26,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
