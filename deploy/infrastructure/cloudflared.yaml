@@ -13,12 +13,6 @@ spec:
       values: |-
         tunnel:
           secretName: "tunnel-credentials"
-          ingress:
-          - hostname: minio.balanlab.dev
-            service: http://minio-infra.storage:9000
-          - hostname: argo.balanlab.dev
-            service: http://argocd-server.argocd
-          - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
     namespace: networking
