@@ -26,8 +26,12 @@ data:
     # from the internet to cloudflared, run `cloudflared tunnel route dns <tunnel> <hostname>`.
     # E.g. `cloudflared tunnel route dns example-tunnel tunnel.example.com`.
     ingress:
-    - hostname: minio.balanlab.dev
-      service: http://minio-infra.storage:9000
-    - hostname: argo.balanlab.dev
-      service: http://argocd-server.argocd
-    - service: http_status:404
+    {{- range .Values.tunnel.services.mapping }}
+    {{- if .hostname}}
+    - hostname: {{ .hostname }}
+      service: {{ .service }}
+    {{ else }}
+    - service: {{ .service }}
+    {{- end }}
+    {{- end }}
+

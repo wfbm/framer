@@ -5,15 +5,20 @@ metadata:
   labels:
     name: storage
 ---
-apiVersion: v1
-kind: Secret
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
 metadata:
   name: minio-credentials
   namespace: storage
-type: Opaque
-stringData:
-  MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
-  MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
+spec:
+  encryptedData:
+    MINIO_ROOT_PASSWORD: AgA623wwljStrX0TSASLtHMvNLZcNOcccX2QDDuTbQkMMMhBFhNMsyuuFqey0oRGBA5hj7GGItbTilB0jGJhLEUasvcWSlw0CUHADRFh8QZfrRrVNjMdunnuNKv9akN5UDHDHeojP+BPPOWXGi5uv3p9Ni5Dz6t4Oq22+n2n6On620d5caCOd2pCAM2XmJbE1TQ+HT9idGGx9Mkus2BPwY5rfuN42Enzd8cChPfLt2K89hh24SG1O4U+VaBo2ppojZUeHCnAjD+PJrVpFBgJ/LFVwi/VReyhkMvaFXg3BQSUfRUYK0lV0zUVe12Ix3mdJDyM81LCEhoSk2+/W+zkrI0mXPvEgTfqWw4obv1Hy4J0FBVziBCn/E/IKXsQjEOy0LzTMxFro/L7AE6LpIHco8Ivvwz0RrOJ1xHINiGjrLLISbKCqp/p/k1IiTUL4KLCHtHfvNChN417OTjMqCfC8Ew5nHB3nEdinoeas4e1F5ryMrf4in0clN0bGD5o3wevQpWTHQnoRjZrIi28COAtLlH35Vns0TX8iGn8vYc8sy11Tg1trFY7ypmae9VS51W0cwVT9KCWhExPmC1WyyWcV0hlHVd0HmCuSvqbU2y36oG4ArkFGe5hshyiBKOFpaH5ZRQFVFDLT7WGsARMzSM/BhN8qmyXdv+s+GquQTzgVTKvU0cXfT1gziDJxcbq9FePjNLdtvBGMyRgqgNa6A==
+    MINIO_ROOT_USER: AgBUDiF9wdkFwdB/jCS4mn/gNkQqN4PQXR6FbbuMp5ff/NzlpfXhg4DMo+d6QZzavz8tL4TDswKB7WXEI6NwTeAbWmK3Jz4TDIue4vj4leF84Q/m+NwR8YEvSFXOESwFGmvJabbRKC+5jbp4CfcY/PS/OKkwii9Y+k0Q+bpu0nVcVC8nnW3RK3sMPWgRDUhf33qDnZkdE445W4c+8TeX2jv6i185Bn4hsAuphla0DK87c2V8n8dpavk+jB2+xP7q34RMMYXwBA1HR5PyxWEMyokzao5r3KxUQVPRMV/QkE4pK3cMo3HQe1hgtUL1AsT3p7FjrVRba9geOJyCbCciSfvmjxnPc0ZqcHMtONVBBZMgObcaEWPP9RaJtwpgj8wS6Ed+nvMH6lgEs2MuW7tFayWup++wj1KIQWdT/7T5dP42aYr3GPMBL5EL9WAKziHiXpBHe86wguTzIFHoXHKNiiamxp2bpJXAFqSw7W5yfyhsYix6XxJfQiiSlZ5WhvNTtwbGDqidWOJxGxBJH0bfI1TqoEiyz0t1tAfTKv6B0iSrTGBxha/bu8pXyK3qkUU1+I+r9WF6CqnFhzKyBY/uhQAs+d6AFaywIZ4bL4cAc6tgDJPQ7ny2pHWMZWEzDwWv7tnVq7DjPmMxXiWtQs1s2/Wi99mxJvqBc/pQ51tpqgEUvgiKAx+H7giDqumRiVtGWEh6hI+zIQ==
+  template:
+    metadata:
+      name: minio-credentials
+      namespace: storage
+    type: Opaque
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -40,6 +45,7 @@ spec:
         auth:
           existingSecret: minio-credentials
           forcePassword: true
+        extraEnvVarsSecret: minio-credentials
         persistence: 
           enabled: true
           size: 5Gi
