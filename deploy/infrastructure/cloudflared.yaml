@@ -19,6 +19,8 @@ spec:
                 service: http://minio-infra.storage:9000
               - hostname: argo.balanlab.dev
                 service: http://argocd-server.argocd
+              - hostname: waha.balanlab.dev
+                service: http://waha-service.waha:3000
               - service: http_status:404
   destination:
     server: https://kubernetes.default.svc
